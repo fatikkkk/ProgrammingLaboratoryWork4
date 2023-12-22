@@ -16,16 +16,6 @@ void removePunctuation(char* input, char* output) {
                 inputIndex++;
         }
 
-        /*else if (input[inputIndex] == '.')
-        {
-            if (input[inputIndex + 1] == '.' && input[inputIndex + 2] == '.')
-            {
-                return;
-            }
-            else
-                while (input[inputIndex + 1] == ' ' || input[inputIndex + 1] == ',' || input[inputIndex + 1] == ':' || input[inputIndex + 1] == '"')
-                    inputIndex++;
-        }*/
         outputIndex++;
         inputIndex++;
     }
@@ -50,7 +40,6 @@ void removeSpaces(char* input, char* output) {
 }
 
 void changeRegister(char* input) {
-    //int inputIndex = 0, outputIndex = 0;
     for (int i = 0; i < countWord * countSymbol; i++)
     {
         if (input[i] != 0)
@@ -62,16 +51,6 @@ void changeRegister(char* input) {
 
     if (input[0] >= 'a' && input[0] <= 'z')
         input[0] -= 32;
-
-    /*for (int i = 0; i < 500; i++)
-    {
-        if (i == 0)
-            toupper(input[i]);
-        else
-            tolower(input[i]);
-    }*/
-
-    //output[outputIndex] = '\0';
 }
 
 void displayOnlyNumber(char* word) {
@@ -85,7 +64,6 @@ void displayOnlyNumber(char* word) {
         if (count == strlen(word))
             cout << word << "\n";
     }
-
 }
 
 void displayOnlySymbol(char* word) {
@@ -213,8 +191,6 @@ void kmpSearch(char* text, char* pattern) {
                 i++;
         }
     }
-
-
 }
 
 void printArray(char* input, int size) {
@@ -280,12 +256,6 @@ int main()
 
     
     
-    /*
-    cin.clear();
-    cin.ignore();*/
-   
-    
-    // removeSpaces(str, outputText);
     removePunctuation(str, outputText);
     cout << "After removing extra characters: \n";
     cout << outputText << "\n"; 
