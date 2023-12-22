@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 const int countWord = 50, countSymbol = 10;
@@ -48,76 +49,43 @@ void removeSpaces(char* input, char* output) {
     output[outputIndex] = '\0';
 }
 
-void changeRegister(char* input, char* output) {
+void changeRegister(char* input) {
     //int inputIndex = 0, outputIndex = 0;
+    for (int i = 0; i < countWord * countSymbol; i++)
+    {
+        if (input[i] != 0)
+        {
+            if (input[i] >= 'A' && input[i] <= 'Z')
+                input[i] += 32;
+        }
+    }
 
-    for (int i = 0; i < 500; i++)
+    if (input[0] >= 'a' && input[0] <= 'z')
+        input[0] -= 32;
+
+    /*for (int i = 0; i < 500; i++)
     {
         if (i == 0)
             toupper(input[i]);
         else
             tolower(input[i]);
-    }
+    }*/
 
     //output[outputIndex] = '\0';
 }
-
-//void filLWords(char* input, char* words[]) {
-//    int valueMin = 0, valueMax = 0, count = 0, difference = 0;
-//    char supportWord[10] = { 0 };
-//    for (int i = 0; i < 500; i++)
-//    {
-//        if (input[i] == 32 || input[i] == 46) {
-//
-//            valueMax = i;
-//            difference = valueMax - valueMin;
-//            if (difference > 10) cout << "Error\n";
-//            else {
-//                for (int j = 0; j < difference; j++)
-//                {
-//                    if (valueMin < valueMax)
-//                    {
-//                        supportWord[j] = input[valueMin];
-//                        //cout << supportWord[j] << " " << str[valueMin] << "\n";
-//                        valueMin++;
-//                    }
-//                }
-//            }
-//            valueMin++;
-//
-//            //for (int j = 0; j < countSymbol; j++)
-//            //{
-//            //    cout << supportWord[j] << " ";
-//            //}
-//
-//            for (int j = 0; j <= difference; j++)
-//            {
-//                words[count][j] = supportWord[j];
-//            }
-//            cout << "\n";
-//            cout << words[count];
-//            for (int j = 0; j < countSymbol; j++)
-//            {
-//                supportWord[j] = 0;
-//            }
-//            count++;
-//        }
-//    }
-//
-//}
 
 void displayOnlyNumber(char* word) {
     int count = 0;
     if (word[0] != 0)
     {
         for (int j = 0; j < 10; j++)
-        {
             if (word[j] >= '0' && word[j] <= '9')
                 count++;
-        }
+
         if (count == strlen(word))
             cout << word << "\n";
     }
+
 }
 
 void displayOnlySymbol(char* word) {
@@ -125,10 +93,9 @@ void displayOnlySymbol(char* word) {
     if (word[0] != 0)
     {
         for (int j = 0; j < 10; j++)
-        {
             if (word[j] >= 'A' && word[j] <= 'z')
                 count++;
-        }
+
         if (count == strlen(word))
             cout << word << "\n";
     }
@@ -262,25 +229,77 @@ void printArray(char* input, int size) {
 
 int main()
 {
-
     char words[countWord][countSymbol] = { 0 };
-
-    char str[500];
-
-    char outputText[500] = { 0 };
-
+    char str[countWord * countSymbol];
+    char str1[countWord * countSymbol];
+    char outputText[countWord * countSymbol] = { 0 };
+    
+    char substring[countSymbol];
+    
     int valueMin = 0, valueMax = 0, count = 0, difference = 0;
+    char supportWord[countSymbol] = { 0 };
+    ifstream fs("textfile.txt");
+    
+    int selectReadUser, chooseUser;
 
-    char supportWord[10] = { 0 };
+    cout << "Please, select a text input method:\n";
+    cout << "\t1 - from the keyboard\n";
+    cout << "\t2 - from the file txt\n";
 
-    cin.getline(str, 500);
+    cin >> selectReadUser;
+    switch (selectReadUser)
+    {
+    case 1:
+        cin.ignore();
+        cout << "You select write from the keyboard. Please, type text here for work with it: \n";
+        cin.getline(str, countWord * countSymbol);
 
-    removeSpaces(str, outputText);
+        break;
+
+    case 2:
+        cout << "You selected open and read file and write text to char array\n";
+
+        if (fs.is_open())
+        {
+            cout << "This is OK\n";
+            fs.getline(str, countWord * countSymbol, '.');
+        }
+        else
+            cout << "This is not OK\n";
+
+        break;
+    default:
+        break;
+    }
+
+
+    cout << "Contains text:\n";
+    cout << str << "\n";
+
+    
+
+    
+    
+    /*
+    cin.clear();
+    cin.ignore();*/
+   
+    
+    // removeSpaces(str, outputText);
+    removePunctuation(str, outputText);
+    cout << "After removing extra characters: \n";
+    cout << outputText << "\n"; 
+    
+    
+    
+    changeRegister(outputText);
+    cout << "After correct register: \n";
     cout << outputText << "\n";
 
+    // Add in array words
     for (int i = 0; i < 500; i++)
     {
-        if (outputText[i] == ' ' || outputText[i] == '.') {
+        if (outputText[i] == ' ' || outputText[i] == '.' || outputText[i] == ',' || outputText[i] == ':' || outputText[i] == '"') {
             valueMax = i;
             difference = valueMax - valueMin;
             if (difference > 10) cout << "Error\n";
@@ -314,49 +333,73 @@ int main()
             }
         }
     }
+
+    bool isLive = true;
+    while (isLive)
+    {
+        cout << "Please, choose a number for char Array:\n";
+        cout << "\t 1 - Display all words containing only letters, then only numbers and then borh letters and numbers\n";
+        cout << "\t 2 - Display all words with moving all number to the end\n";
+        cout << "\t 3 - Linear search\n";
+        cout << "\t 4 - KMP search\n";
+        cout << "Number: ";
+        cin >> chooseUser;
+
+        switch (chooseUser)
+        {
+        case 1:
+            cout << "\n=========Only Number========\n";
+            for (int i = 0; i < countWord; i++)
+                displayOnlyNumber(words[i]);
+
+            cout << "\n=========Only Symbol========\n";
+            for (int i = 0; i < countWord; i++)
+                displayOnlySymbol(words[i]);
+
+            cout << "\n========= Mixed ========\n";
+            for (int i = 0; i < countWord; i++)
+                displayMixed(words[i]);
+            
+            cout << "\n";
+            break;
+
+        case 2:
+            for (int i = 0; i < countWord; i++)
+                if (words[i][0] != 0)
+                    moveNumber(words[i]);
+
+            cout << "\nDisplay all words with number moving to the end!\n";
+            for (int i = 0; i < countWord; i++)
+                printArray(words[i], countSymbol);
+
+            cout << "\n";
+            break;
+
+        case 3:
+            cout << "Please, type pattern (substring) for Linear searching less 10 symbols: \n";
+            cin.ignore();
+            cin.getline(substring, countSymbol);
+            linearSearch(outputText, substring);
+            cout << "\n";
+            break;
+        case 4:
+            cout << "Please, type pattern (substring) for KMP searching less 10 symbols: \n";
+            cin.ignore();
+            cin.getline(substring, countSymbol);
+            kmpSearch(outputText, substring);
+            cout << "\n";
+            break;
+
+        default:
+            break;
+        }
+
+    }
     
-    cout << "\n=========Only Number========\n";
 
-    for (int i = 0; i < countWord; i++)
-    {
-        displayOnlyNumber(words[i]);
-    }
+    
 
-    cout << "\n=========Only Symbol========\n";
-    for (int i = 0; i < countWord; i++)
-    {
-        displayOnlySymbol(words[i]);
-    }
 
-    cout << "\n========= Mixed ========\n";
-    for (int i = 0; i < countWord; i++)
-    {
-        displayMixed(words[i]);
-    }
-
-    //for (int i = 0; i < countWord; i++)
-    //{
-    //    if (words[i][0] != 0)
-    //    {
-    //        moveNumber(words[i], countSymbol);
-    //    }
-    //}
-
-    char someText[] = "hello";
-    linearSearch(outputText, someText);
-    cout << "\n";
-    kmpSearch(outputText, someText);
-
-    for (int i = 0; i < countWord; i++)
-    {
-        if (words[i][0] != 0)
-            moveNumber(words[i]);
-    }
-
-    cout << "\n";
-    for (int i = 0; i < countWord; i++)
-    {
-        printArray(words[i], countSymbol);
-    }
+    
 
 }
