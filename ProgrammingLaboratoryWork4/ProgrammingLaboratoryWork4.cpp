@@ -248,19 +248,12 @@ int main()
         break;
     }
 
-
     cout << "Contains text:\n";
     cout << str << "\n";
 
-    
-
-    
-    
     removePunctuation(str, outputText);
     cout << "After removing extra characters: \n";
     cout << outputText << "\n"; 
-    
-    
     
     changeRegister(outputText);
     cout << "After correct register: \n";
@@ -363,13 +356,5 @@ int main()
         default:
             break;
         }
-
     }
-    
-
-    
-
-
-    
-
 }
